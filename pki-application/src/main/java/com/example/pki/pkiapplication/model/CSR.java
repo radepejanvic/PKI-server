@@ -27,5 +27,5 @@ public class CSR {
     private CertificateType template;
 
     @Enumerated(EnumType.STRING)
-    private CertificateStatus status;
+    private CSRStatus status;
 }

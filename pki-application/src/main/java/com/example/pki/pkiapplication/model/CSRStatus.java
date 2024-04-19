@@ -1,5 +1,5 @@
 package com.example.pki.pkiapplication.model;
 
-public enum CertificateStatus {
+public enum CSRStatus {
     PENDING, APPROVED, REJECTED
 }

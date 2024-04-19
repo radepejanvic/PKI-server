@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface JpaService<T> {
 
     List<T> findAll();
