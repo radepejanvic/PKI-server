@@ -1,4 +1,4 @@
-package com.example.pki.pkiapplication.service.impl;
+package com.example.pki.pkiapplication.service;
 
 import org.springframework.stereotype.Service;
 
