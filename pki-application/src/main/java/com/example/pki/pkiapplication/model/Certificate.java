@@ -23,6 +23,8 @@ public class Certificate {
 
     private Long expiresOn;
 
+    private boolean valid;
+
     @OneToMany(fetch = FetchType.LAZY)
     private HashSet<Extension> extensions;
 
