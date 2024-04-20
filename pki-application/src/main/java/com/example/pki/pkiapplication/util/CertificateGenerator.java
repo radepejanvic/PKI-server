@@ -3,6 +3,7 @@ package com.example.pki.pkiapplication.util;
 import com.example.pki.pkiapplication.model.CSR;
 import com.example.pki.pkiapplication.model.Certificate;
 import com.example.pki.pkiapplication.model.CertificateType;
+import com.example.pki.pkiapplication.model.Issuer;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -37,27 +38,20 @@ public class CertificateGenerator {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public static X509Certificate generateCertificate(X500Name x500NameIssuer, PrivateKey issuerPK, CSR csr) {
+    public static X509Certificate generateCertificate(Issuer issuer, CSR csr) {
         try {
             JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
             builder = builder.setProvider("BC");
 
-            ContentSigner contentSigner = builder.build(issuerPK);
-
-            X500NameBuilder x500NameBuilderSubject = new X500NameBuilder(BCStyle.INSTANCE);
-            x500NameBuilderSubject.addRDN(BCStyle.CN, csr.getCommonName());
-            x500NameBuilderSubject.addRDN(BCStyle.O, csr.getOrganization());
-            x500NameBuilderSubject.addRDN(BCStyle.C, csr.getCountry());
-            x500NameBuilderSubject.addRDN(BCStyle.E, csr.getEmail());
-
+            ContentSigner contentSigner = builder.build(issuer.getPrivateKey());
 
             Long currentMillis = System.currentTimeMillis();
 
-            X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(x500NameIssuer,
+            X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuer.getX500name(),
                     BigInteger.valueOf(currentMillis),
                     new Date(currentMillis),
                     new Date(getExpiresOn(currentMillis, csr.getTemplate())),
-                    x500NameBuilderSubject.build(),
+                    getX500Name(csr),
                     getPbKey(csr.getPublicKey()));
 
             X509CertificateHolder certHolder = certGen.build(contentSigner);
@@ -85,16 +79,26 @@ public class CertificateGenerator {
         return null;
     }
 
+    public static X500Name getX500Name(CSR csr){
+        X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
+        builder.addRDN(BCStyle.CN, csr.getCommonName());
+        builder.addRDN(BCStyle.O, csr.getOrganization());
+        builder.addRDN(BCStyle.C, csr.getCountry());
+        builder.addRDN(BCStyle.E, csr.getEmail());
+        return builder.build();
+    }
+
     public static Long getExpiresOn(Long issuedOn, CertificateType type){
-        Long ret = 0L;
+        Long ret = issuedOn;
         switch (type) {
             case CertificateType.SS:
-                ret = 315576000000L;
+                ret += 315576000000L;
                 break;
             case CertificateType.CA:
-                ret =  126230400000L;
+                ret +=  126230400000L;
+                break;
             case CertificateType.EE:
-                ret =  15778800000L;
+                ret +=  15778800000L;
                 break;
         }
         return ret;

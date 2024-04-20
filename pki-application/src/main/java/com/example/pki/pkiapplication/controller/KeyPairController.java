@@ -2,7 +2,7 @@ package com.example.pki.pkiapplication.controller;
 
 
 import com.example.pki.pkiapplication.service.KeyStoringService;
-import com.example.pki.pkiapplication.utils.RSAKeyGenerator;
+import com.example.pki.pkiapplication.util.RSAKeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
