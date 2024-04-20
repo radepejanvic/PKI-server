@@ -4,9 +4,11 @@ import com.example.pki.pkiapplication.model.CSR;
 import com.example.pki.pkiapplication.repository.CSRRepository;
 import com.example.pki.pkiapplication.service.CSRService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CSRServiceImpl implements CSRService {
 
     @Autowired

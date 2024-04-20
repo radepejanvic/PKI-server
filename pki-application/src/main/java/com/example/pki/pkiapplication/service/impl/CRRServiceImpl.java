@@ -4,9 +4,11 @@ import com.example.pki.pkiapplication.model.CRR;
 import com.example.pki.pkiapplication.repository.CRRRepository;
 import com.example.pki.pkiapplication.service.CRRService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CRRServiceImpl implements CRRService {
 
     @Autowired
