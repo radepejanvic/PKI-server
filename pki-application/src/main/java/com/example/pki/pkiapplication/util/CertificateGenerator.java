@@ -1,13 +1,11 @@
 package com.example.pki.pkiapplication.util;
 
 import com.example.pki.pkiapplication.model.CSR;
-import com.example.pki.pkiapplication.model.Certificate;
 import com.example.pki.pkiapplication.model.CertificateType;
 import com.example.pki.pkiapplication.model.Issuer;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
@@ -27,8 +25,6 @@ import org.springframework.stereotype.Component;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
 
@@ -78,6 +74,44 @@ public class CertificateGenerator {
         }
         return null;
     }
+
+    public static X509Certificate generateRootCertificate(CSR csr, KeyPair keyPair) {
+        try {
+            JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+            builder = builder.setProvider("BC");
+
+            ContentSigner contentSigner = builder.build(keyPair.getPrivate());
+
+            Long currentMillis = System.currentTimeMillis();
+
+            X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(getX500Name(csr),
+                    BigInteger.valueOf(currentMillis),
+                    new Date(currentMillis),
+                    new Date(getExpiresOn(currentMillis, csr.getTemplate())),
+                    getX500Name(csr),
+                    keyPair.getPublic());
+
+            X509CertificateHolder certHolder = certGen.build(contentSigner);
+
+            JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
+            certConverter = certConverter.setProvider("BC");
+
+            return certConverter.getCertificate(certHolder);
+
+        } catch (CertificateEncodingException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (OperatorCreationException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public static X500Name getX500Name(CSR csr){
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
