@@ -1,4 +1,4 @@
-package com.example.pki.pkiapplication.utils;
+package com.example.pki.pkiapplication.util;
 
 import java.security.KeyPair;
 

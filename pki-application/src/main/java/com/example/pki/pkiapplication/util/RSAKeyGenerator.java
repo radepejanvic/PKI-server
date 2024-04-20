@@ -1,11 +1,11 @@
-package com.example.pki.pkiapplication.utils;
+package com.example.pki.pkiapplication.util;
 
 import org.springframework.stereotype.Component;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.*;
 
-@Component
+@Component("rsaKeyGenerator")
 public class RSAKeyGenerator implements KeyGenerator{
 
     public RSAKeyGenerator() {
