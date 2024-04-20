@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Data
+@AllArgsConstructor
 public class UserCredentialsDTO {
 
     private Long id;
