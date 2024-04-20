@@ -4,9 +4,11 @@ import com.example.pki.pkiapplication.model.Certificate;
 import com.example.pki.pkiapplication.repository.CertificateRepository;
 import com.example.pki.pkiapplication.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CertificateServiceImpl implements CertificateService {
 
     @Autowired
