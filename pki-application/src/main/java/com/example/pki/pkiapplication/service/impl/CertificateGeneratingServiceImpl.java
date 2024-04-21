@@ -6,6 +6,8 @@ import com.example.pki.pkiapplication.model.Issuer;
 import com.example.pki.pkiapplication.util.CertificateGenerator;
 import com.example.pki.pkiapplication.util.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
@@ -22,6 +24,15 @@ public class CertificateGeneratingServiceImpl {
 
     @Autowired
     private KeyGenerator keyGenerator;
+
+    public Certificate generateCertificate(CSR csr) {
+        return switch (csr.getTemplate()) {
+            case SS -> generateRoot(csr);
+            case CA -> generateCA(csr);
+            case EE -> generateEE(csr);
+        };
+    }
+
 
     public Certificate generateEE(CSR csr) {
 
