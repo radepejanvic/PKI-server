@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
 
+import java.math.BigInteger;
 import java.util.HashSet;
 
 @Entity
@@ -15,7 +16,10 @@ public class Certificate {
     private Long id;
 
     @Column(unique = true)
-    private Long serialNumber;
+    private BigInteger serialNumber;
+
+    @Column(unique = true)
+    private String alias;
 
     private String subject;
 

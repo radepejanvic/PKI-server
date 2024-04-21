@@ -5,6 +5,7 @@ import com.example.pki.pkiapplication.model.CertificateType;
 import com.example.pki.pkiapplication.model.Extension;
 import lombok.Data;
 
+import java.math.BigInteger;
 import java.util.HashSet;
 
 @Data
@@ -12,7 +13,7 @@ public class CertificateDTO {
 
     private Long id;
 
-    private Long serialNumber;
+    private BigInteger serialNumber;
 
     private String subject;
 
