@@ -82,10 +82,10 @@ public class PkiApplication {
 //		keyStoreWriter.write("rade", generateRootCertificate(certificate, keyPair));
 //		keyStoreWriter.saveKeyStore("src/main/resources/static/example.jks",  "password".toCharArray());
 
-		keyStoringService.write("probaServisa",  certificateGenerator.generateCertificate(issuer, certificate, null), keyPair.getPrivate());
-
-		System.out.println(keyStoringService.read("probaServisa"));
-		System.out.println(keyStoringService.readPrivateKey("probaServisa"));
-		System.out.println(keyStoringService.readIssuerX500Name("probaServisa"));
+//		keyStoringService.write("probaServisa",  certificateGenerator.generateCertificate(issuer, certificate, null), keyPair.getPrivate());
+//
+//		System.out.println(keyStoringService.read("probaServisa"));
+//		System.out.println(keyStoringService.readPrivateKey("probaServisa"));
+//		System.out.println(keyStoringService.readIssuerX500Name("probaServisa"));
 	}
 }
