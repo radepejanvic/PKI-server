@@ -54,6 +54,8 @@ public class CertificateGenerator {
                     getX500Name(csr),
                     subjectPublicKey);
 
+            ExtensionsGenerator.addExtensions(certGen, csr, issuer);
+
             X509CertificateHolder certHolder = certGen.build(contentSigner);
 
             JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
@@ -74,6 +76,8 @@ public class CertificateGenerator {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         } catch (InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return null;
