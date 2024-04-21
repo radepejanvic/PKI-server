@@ -1,7 +1,7 @@
 package com.example.pki.pkiapplication.util;
 
 import com.example.pki.pkiapplication.model.CSR;
-import com.example.pki.pkiapplication.model.CertificateType;
+import com.example.pki.pkiapplication.model.enums.CertificateType;
 import com.example.pki.pkiapplication.model.Issuer;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
@@ -24,9 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 import java.util.Date;
 
 @Component

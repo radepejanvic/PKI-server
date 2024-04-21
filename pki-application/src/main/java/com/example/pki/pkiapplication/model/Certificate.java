@@ -1,11 +1,10 @@
 package com.example.pki.pkiapplication.model;
 
+import com.example.pki.pkiapplication.model.enums.CertificateType;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
 
 import java.math.BigInteger;
-import java.util.HashSet;
 
 @Entity
 @Data
@@ -28,9 +27,6 @@ public class Certificate {
     private Long expiresOn;
 
     private boolean valid;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    private HashSet<Extension> extensions;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Certificate issuer;

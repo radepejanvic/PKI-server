@@ -1,7 +1,7 @@
 package com.example.pki.pkiapplication.dto;
 
-import com.example.pki.pkiapplication.model.CSRStatus;
-import com.example.pki.pkiapplication.model.CertificateType;
+import com.example.pki.pkiapplication.model.enums.CSRStatus;
+import com.example.pki.pkiapplication.model.enums.CertificateType;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
