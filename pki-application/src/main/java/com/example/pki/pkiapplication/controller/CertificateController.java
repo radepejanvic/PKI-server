@@ -9,9 +9,11 @@ import com.example.pki.pkiapplication.model.Certificate;
 import com.example.pki.pkiapplication.model.enums.CertificateType;
 import com.example.pki.pkiapplication.service.CSRService;
 import com.example.pki.pkiapplication.service.CertificateService;
+import com.example.pki.pkiapplication.service.ValidatingService;
 import com.example.pki.pkiapplication.service.impl.CertificateGeneratingServiceImpl;
 import com.example.pki.pkiapplication.service.impl.KeyStoringServiceImpl;
 import com.sun.net.httpserver.HttpsServer;
+import jakarta.transaction.Transactional;
 import org.bouncycastle.jce.X509Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +46,9 @@ public class CertificateController {
 
     @Autowired
     private CertificateGeneratingServiceImpl certificateGeneratingService;
+
+    @Autowired
+    private ValidatingService validatingService;
 
     @GetMapping
     public ResponseEntity<?> getAll() {
@@ -80,6 +85,8 @@ public class CertificateController {
             // TODO: Add function for checking the issuers permission for issuing certificates.
             if (issuerCert == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
 
+//            if(!validatingService.isValid(issuerCert)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
             cert.setIssuer(issuerCert);
         }
 
@@ -105,6 +112,8 @@ public class CertificateController {
 
             // TODO: Add function for checking the issuers permission for issuing certificates.
             if (issuerCert == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
+
+//            if(!validatingService.isValid(issuerCert)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
             cert.setIssuer(issuerCert);
         }
