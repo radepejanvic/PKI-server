@@ -2,8 +2,11 @@ package com.example.pki.pkiapplication.model;
 
 import com.example.pki.pkiapplication.model.enums.CSRStatus;
 import com.example.pki.pkiapplication.model.enums.CertificateType;
+import com.example.pki.pkiapplication.model.enums.KeyUsage;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -34,4 +37,6 @@ public class CSR {
     private String issuerAlias;
 
     private String subjectAlias;
+    private List<KeyUsage> keyUsages;
+    private String domainName;
 }

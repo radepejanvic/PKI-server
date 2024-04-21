@@ -5,11 +5,13 @@ import com.example.pki.pkiapplication.model.Certificate;
 import com.example.pki.pkiapplication.model.Issuer;
 import com.example.pki.pkiapplication.util.CertificateGenerator;
 import com.example.pki.pkiapplication.util.KeyGenerator;
+import org.bouncycastle.asn1.x500.X500Name;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.x500.X500Principal;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 
@@ -72,8 +74,11 @@ public class CertificateGeneratingServiceImpl {
     public Issuer generateIssuer(String alias) {
         Issuer issuer = new Issuer();
 
-        issuer.setX500name(keyStoringService.readIssuerX500Name(alias));
+        X509Certificate certificate = keyStoringService.read(alias);
+        X500Principal x500Principal = certificate.getIssuerX500Principal();
+        issuer.setX500name(new X500Name(x500Principal.getName()));
         issuer.setPrivateKey(keyStoringService.readPrivateKey(alias));
+        issuer.setPublicKey(certificate.getPublicKey());
 
         return issuer;
     }

@@ -17,6 +17,8 @@ public class CSRDTOMapper {
         csr.setIssuerAlias(csrdto.getIssuerAlias());
         csr.setPublicKey(csrdto.getPublicKey());
         csr.setSubjectAlias(csrdto.getSubjectAlias());
+        csr.setKeyUsages(csrdto.getKeyUsages());
+        csr.setDomainName(csrdto.getDomainName());
         return csr;
     }
 
@@ -32,6 +34,8 @@ public class CSRDTOMapper {
         csrdto.setIssuerAlias(csr.getIssuerAlias());
         csrdto.setPublicKey(csr.getPublicKey());
         csrdto.setSubjectAlias(csr.getSubjectAlias());
+        csrdto.setKeyUsages(csr.getKeyUsages());
+        csrdto.setDomainName(csr.getDomainName());
         return csrdto;
     }
 }

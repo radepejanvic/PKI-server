@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 @Service
@@ -59,8 +60,5 @@ public class KeyStoringServiceImpl {
         return pemKeyStore.read(filename);
     }
 
-    public X500Name readIssuerX500Name(String alias) {
-        return keyStoreReader.readIssuerX500Name(certStore, certStorePass, alias);
-    }
 
 }
