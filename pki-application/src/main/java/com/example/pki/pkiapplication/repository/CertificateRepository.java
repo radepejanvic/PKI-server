@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 public interface CertificateRepository extends JpaRepository<Certificate, Long> {
 
+    Certificate findByAlias(String alias);
 }

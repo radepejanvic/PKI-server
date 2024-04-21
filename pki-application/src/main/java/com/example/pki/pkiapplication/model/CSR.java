@@ -14,7 +14,7 @@ public class CSR {
     private Long id;
 
     // base64 encoded public key
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, columnDefinition = "TEXT")
     private String publicKey;
 
     @Column(nullable = false)
@@ -31,4 +31,8 @@ public class CSR {
 
     @Enumerated(EnumType.STRING)
     private CSRStatus status;
+
+    private String issuerAlias;
+
+    private String subjectAlias;
 }

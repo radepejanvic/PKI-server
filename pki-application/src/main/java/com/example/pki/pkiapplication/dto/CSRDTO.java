@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class CSRDTO {
-
     private Long id;
     private String publicKey;
     private String commonName;
@@ -17,4 +16,6 @@ public class CSRDTO {
     private String email;
     private CertificateType template;
     private CSRStatus status;
+    private String issuerAlias;
+    private String subjectAlias;
 }

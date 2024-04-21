@@ -1,6 +1,8 @@
 package com.example.pki.pkiapplication;
 
 import com.example.pki.pkiapplication.model.*;
+import com.example.pki.pkiapplication.service.impl.KeyStoringServiceImpl;
+import com.example.pki.pkiapplication.util.CertificateGenerator;
 import com.example.pki.pkiapplication.util.KeyStoreReader;
 import com.example.pki.pkiapplication.util.KeyStoreWriter;
 import com.example.pki.pkiapplication.util.RSAKeyGenerator;
@@ -15,13 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
-import java.util.HashSet;
-
-import static com.example.pki.pkiapplication.util.CertificateGenerator.*;
 
 @SpringBootApplication
 public class PkiApplication {
@@ -32,18 +28,26 @@ public class PkiApplication {
 		return validatorFactory.getValidator();
 	}
 
+	private static KeyStoringServiceImpl keyStoringService;
+
 	private static KeyStoreReader keyStoreReader;
 
 	private static KeyStoreWriter keyStoreWriter;
 
 	private static ApplicationContext context;
 	private static RSAKeyGenerator rsaKeyGenerator;
+
+	private static CertificateGenerator certificateGenerator;
+
 	public static void main(String[] args) {
 
 		context = SpringApplication.run(PkiApplication.class, args);
 		keyStoreReader = (KeyStoreReader) context.getBean("keyStoreReader");
 		keyStoreWriter = (KeyStoreWriter) context.getBean("keyStoreWriter");
 		rsaKeyGenerator = (RSAKeyGenerator) context.getBean("rsaKeyGenerator");
+		keyStoringService = (KeyStoringServiceImpl) context.getBean("keyStoringServiceImpl");
+		certificateGenerator = (CertificateGenerator) context.getBean("certificateGenerator");
+
 
 		KeyPair keyPair = rsaKeyGenerator.generateKeys();
 
@@ -72,14 +76,16 @@ public class PkiApplication {
 		issuer.setX500name(x500NameBuilderSubject.build());
 
 
-		keyStoreWriter.loadKeyStore("src/main/resources/static/example.jks",  "password".toCharArray());
+//		keyStoreWriter.loadKeyStore("src/main/resources/static/example.jks",  "password".toCharArray());
 
-        keyStoreWriter.write("cert1", issuer.getPrivateKey(), "password".toCharArray(), generateCertificate(issuer, certificate));
-		keyStoreWriter.saveKeyStore("src/main/resources/static/example.jks",  "password".toCharArray());
+//		keyStoreWriter.write("cert1", generateCertificate(issuer, certificate));
+//		keyStoreWriter.write("rade", generateRootCertificate(certificate, keyPair));
+//		keyStoreWriter.saveKeyStore("src/main/resources/static/example.jks",  "password".toCharArray());
 
-
-		java.security.cert.Certificate loadedCertificate = keyStoreReader.readCertificate("src/main/resources/static/example.jks", "password", "cert1");
-
-		System.out.println(loadedCertificate);
+//		keyStoringService.write("probaServisa",  certificateGenerator.generateCertificate(issuer, certificate, null), keyPair.getPrivate());
+//
+//		System.out.println(keyStoringService.read("probaServisa"));
+//		System.out.println(keyStoringService.readPrivateKey("probaServisa"));
+//		System.out.println(keyStoringService.readIssuerX500Name("probaServisa"));
 	}
 }

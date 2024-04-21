@@ -1,5 +1,6 @@
 package com.example.pki.pkiapplication.config.security.jwt;
 
+import com.example.pki.pkiapplication.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,6 +18,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenUtil implements Serializable {
+
+    @Autowired
+    private UserService userService;
+
     private static final long serialVersionUID = -2550185165626007488L;
     public static final long JWT_TOKEN_VALIDITY = 500 * 60 * 60;
     @Value("${jwt.secret}")
@@ -61,7 +66,7 @@ public class JwtTokenUtil implements Serializable {
     // Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
     // compaction of the JWT to a URL-safe string
     private String doGenerateToken(Map<String, Object> claims, String subject, UserDetails userDetails) {
-        return Jwts.builder().setClaims(claims).setSubject(subject)
+        return Jwts.builder().setClaims(claims).setSubject(subject).claim("id",userService.findByEmail(userDetails.getUsername()).get().getId()).claim("Authorities", userDetails.getAuthorities().stream().map(authority -> authority.getAuthority().replace("ROLE_", "")).collect(Collectors.toSet())).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }

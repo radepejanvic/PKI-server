@@ -1,5 +1,6 @@
 package com.example.pki.pkiapplication.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
@@ -12,6 +13,7 @@ import java.security.cert.CertificateException;
 
 @Component
 public class KeyStoreWriter {
+
     private KeyStore keyStore;
 
     public KeyStoreWriter() {
@@ -63,9 +65,9 @@ public class KeyStoreWriter {
         }
     }
 
-    public void write(String alias, PrivateKey privateKey, char[] password, java.security.cert.Certificate certificate) {
+    public void write(String alias, java.security.cert.Certificate certificate) {
         try {
-            keyStore.setKeyEntry(alias, privateKey, password, new Certificate[] {certificate});
+            keyStore.setCertificateEntry(alias, certificate);
         } catch (KeyStoreException e) {
             e.printStackTrace();
         }

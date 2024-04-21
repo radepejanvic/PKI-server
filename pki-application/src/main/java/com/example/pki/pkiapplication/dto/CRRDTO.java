@@ -2,12 +2,14 @@ package com.example.pki.pkiapplication.dto;
 
 import lombok.Data;
 
+import java.math.BigInteger;
+
 @Data
 public class CRRDTO {
 
     private Long id;
 
-    private Long serialNumber;
+    private BigInteger serialNumber;
 
     private String reason;
 

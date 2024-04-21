@@ -14,6 +14,9 @@ public class CSRDTOMapper {
         csr.setOrganization(csrdto.getOrganization());
         csr.setTemplate(csrdto.getTemplate());
         csr.setStatus(csrdto.getStatus());
+        csr.setIssuerAlias(csrdto.getIssuerAlias());
+        csr.setPublicKey(csrdto.getPublicKey());
+        csr.setSubjectAlias(csrdto.getSubjectAlias());
         return csr;
     }
 
@@ -26,6 +29,9 @@ public class CSRDTOMapper {
         csrdto.setOrganization(csr.getOrganization());
         csrdto.setTemplate(csr.getTemplate());
         csrdto.setStatus(csr.getStatus());
+        csrdto.setIssuerAlias(csr.getIssuerAlias());
+        csrdto.setPublicKey(csr.getPublicKey());
+        csrdto.setSubjectAlias(csr.getSubjectAlias());
         return csrdto;
     }
 }
