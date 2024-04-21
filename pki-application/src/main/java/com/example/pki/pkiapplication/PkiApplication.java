@@ -1,6 +1,8 @@
 package com.example.pki.pkiapplication;
 
 import com.example.pki.pkiapplication.model.*;
+import com.example.pki.pkiapplication.model.enums.CSRStatus;
+import com.example.pki.pkiapplication.model.enums.CertificateType;
 import com.example.pki.pkiapplication.service.impl.KeyStoringServiceImpl;
 import com.example.pki.pkiapplication.util.CertificateGenerator;
 import com.example.pki.pkiapplication.util.KeyStoreReader;
