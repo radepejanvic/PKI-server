@@ -23,7 +23,7 @@ public class ExtensionsGenerator {
         certificateBuilder.addExtension(Extension.keyUsage, true, generateKeyUsage(csr));
 
         if(!csr.getTemplate().equals(CertificateType.SS)){
-            AuthorityKeyIdentifier aki = new AuthorityKeyIdentifier(SubjectPublicKeyInfo.getInstance(issuer.getPublicKey()));
+            AuthorityKeyIdentifier aki = new AuthorityKeyIdentifier(SubjectPublicKeyInfo.getInstance(issuer.getPublicKey().getEncoded()));
             certificateBuilder.addExtension(Extension.authorityKeyIdentifier, false, aki);
         }
         if(csr.getTemplate().equals(CertificateType.EE)){

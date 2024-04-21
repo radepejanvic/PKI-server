@@ -85,7 +85,7 @@ public class CertificateController {
             // TODO: Add function for checking the issuers permission for issuing certificates.
             if (issuerCert == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
 
-//            if(!validatingService.isValid(issuerCert)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if(!validatingService.isValid(issuerCert)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
             cert.setIssuer(issuerCert);
         }
@@ -113,7 +113,7 @@ public class CertificateController {
             // TODO: Add function for checking the issuers permission for issuing certificates.
             if (issuerCert == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
 
-//            if(!validatingService.isValid(issuerCert)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if(!validatingService.isValid(issuerCert)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
             cert.setIssuer(issuerCert);
         }
