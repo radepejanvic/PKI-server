@@ -41,9 +41,10 @@ public class CSRController {
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAllPending(){
 
         List<CSRDTO> csrdtos = csrService.findAll().stream()
+                .filter(csr -> csr.getStatus() == CSRStatus.PENDING)
                 .map(csr -> fromModel(csr))
                 .collect(Collectors.toList());
 

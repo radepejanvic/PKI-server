@@ -55,20 +55,8 @@ public class CertificateController {
         return new ResponseEntity<>(certificates, HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/cert/{id}")
-//    public ResponseEntity<CertificateDTO> getOne(@PathVariable Long id) {
-//        Certificate cert = certificateService.findOne(id);
-//
-//        if (cert == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
-//
-//        X509Certificate x509 = keyStoringService.read(cert.getAlias());
-//
-//        return new ResponseEntity<>(CertificateDTOMapper.toDTO(cert, x509), HttpStatus.OK);
-//    }
-
-    @GetMapping(value = "/govno/{id}")
-    public ResponseEntity<?> getOne(@PathVariable Long id) {
-
+    @GetMapping(value = "/cert/{id}")
+    public ResponseEntity<CertificateDTO> getOne(@PathVariable Long id) {
         Certificate cert = certificateService.findOne(id);
 
         if (cert == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
@@ -77,7 +65,6 @@ public class CertificateController {
 
         return new ResponseEntity<>(CertificateDTOMapper.toDTO(cert, x509), HttpStatus.OK);
     }
-
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<?> generateCertificate(@RequestBody CSRDTO dto) {
