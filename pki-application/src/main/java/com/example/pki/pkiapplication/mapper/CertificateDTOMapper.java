@@ -24,6 +24,12 @@ public class CertificateDTOMapper {
         dto.setIssuedOn(cert.getIssuedOn());
         dto.setExpiresOn(cert.getExpiresOn());
         dto.setType(cert.getType());
+        dto.setCertificateAlias(cert.getAlias());
+
+        if (cert.getIssuer() != null) {
+            dto.setIssuerId(cert.getIssuer().getId());
+            dto.setIssuerAlias(cert.getIssuer().getAlias());
+        }
 
         return dto;
     }
