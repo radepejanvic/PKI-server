@@ -20,6 +20,7 @@ public class Certificate {
     @Column(unique = true)
     private String alias;
 
+    // TODO: Remove subject, issuedOn, expiresOn, valid
     private String subject;
 
     private Long issuedOn;
