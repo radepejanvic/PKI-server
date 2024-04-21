@@ -34,6 +34,7 @@ public class CSRController {
     public ResponseEntity<?> createCSR(@Valid @RequestBody CSRDTO csrdto) throws Exception {
 
         CSR csr = fromDTO(csrdto);
+        csr.setStatus(CSRStatus.PENDING);
         csrService.save(csr);
 
         return new ResponseEntity<CSRDTO>(fromModel(csr), HttpStatus.CREATED);

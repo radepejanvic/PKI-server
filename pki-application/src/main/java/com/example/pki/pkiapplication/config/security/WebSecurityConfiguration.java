@@ -30,6 +30,7 @@ public class WebSecurityConfiguration {
                 .requestMatchers("/*").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/register**").permitAll()
+                .requestMatchers("/api/csr**").permitAll()
 //                .requestMatchers("/api/accommodation**").authenticated() // sav pristup API-ju mora da bude autentikovan
                 .anyRequest().authenticated()
                 .and()
