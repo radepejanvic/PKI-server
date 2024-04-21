@@ -1,9 +1,8 @@
 package com.example.pki.pkiapplication.controller;
 
 import com.example.pki.pkiapplication.dto.CSRDTO;
-import com.example.pki.pkiapplication.mapper.CSRDTOMapper;
 import com.example.pki.pkiapplication.model.CSR;
-import com.example.pki.pkiapplication.model.CSRStatus;
+import com.example.pki.pkiapplication.model.enums.CSRStatus;
 import com.example.pki.pkiapplication.service.CSRService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +41,10 @@ public class CSRController {
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAllPending(){
 
         List<CSRDTO> csrdtos = csrService.findAll().stream()
+                .filter(csr -> csr.getStatus() == CSRStatus.PENDING)
                 .map(csr -> fromModel(csr))
                 .collect(Collectors.toList());
 
@@ -73,20 +73,5 @@ public class CSRController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @PostMapping(value = "/{id}")
-    public ResponseEntity<?> acceptCSR(@PathVariable("id") Long id){
-        CSR csr = csrService.findOne(id);
-
-        if(csr == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        //TODO
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-
-
 
 }
