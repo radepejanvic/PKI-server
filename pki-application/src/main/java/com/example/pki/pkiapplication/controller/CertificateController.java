@@ -6,26 +6,29 @@ import com.example.pki.pkiapplication.mapper.CSRDTOMapper;
 import com.example.pki.pkiapplication.mapper.CertificateDTOMapper;
 import com.example.pki.pkiapplication.model.CSR;
 import com.example.pki.pkiapplication.model.Certificate;
-import com.example.pki.pkiapplication.model.enums.CSRStatus;
 import com.example.pki.pkiapplication.model.enums.CertificateType;
 import com.example.pki.pkiapplication.service.CSRService;
 import com.example.pki.pkiapplication.service.CertificateService;
 import com.example.pki.pkiapplication.service.impl.CertificateGeneratingServiceImpl;
+import com.example.pki.pkiapplication.service.impl.KeyStoringServiceImpl;
 import com.sun.net.httpserver.HttpsServer;
+import org.bouncycastle.jce.X509Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.authentication.preauth.x509.X509PrincipalExtractor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.x500.X500Principal;
+import java.security.cert.X509Certificate;
+import java.util.HashMap;
 import java.util.List;
 
-import static com.example.pki.pkiapplication.mapper.CertificateDTOMapper.toDTO;
-
 @RestController
-@Validated
+//@Validated
 @RequestMapping("/api/certificates")
 public class CertificateController {
 
@@ -35,6 +38,9 @@ public class CertificateController {
     @Autowired
     private CSRService csrService;
 
+
+    @Autowired
+    private KeyStoringServiceImpl keyStoringService;
 
     @Autowired
     private CertificateGeneratingServiceImpl certificateGeneratingService;
@@ -49,13 +55,15 @@ public class CertificateController {
         return new ResponseEntity<>(certificates, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getOne(@PathVariable Long id) {
-        Certificate certificate = certificateService.findOne(id);
+    @GetMapping(value = "/cert/{id}")
+    public ResponseEntity<CertificateDTO> getOne(@PathVariable Long id) {
+        Certificate cert = certificateService.findOne(id);
 
-        if (certificate == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
+        if (cert == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
 
-        return new ResponseEntity<>(toDTO(certificate), HttpStatus.OK);
+        X509Certificate x509 = keyStoringService.read(cert.getAlias());
+
+        return new ResponseEntity<>(CertificateDTOMapper.toDTO(cert, x509), HttpStatus.OK);
     }
 
     @PostMapping(consumes = "application/json")
@@ -105,10 +113,7 @@ public class CertificateController {
         cert.setType(csr.getTemplate());
         certificateService.save(cert);
 
-        csr.setStatus(CSRStatus.APPROVED);
-        csrService.save(csr);
-
-        return new ResponseEntity<>(toDTO(cert), HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 

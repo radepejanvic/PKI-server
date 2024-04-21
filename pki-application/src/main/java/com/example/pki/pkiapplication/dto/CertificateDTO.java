@@ -15,15 +15,42 @@ public class CertificateDTO {
 
     private BigInteger serialNumber;
 
-    private String subject;
+    // TODO: Remove
+    private String certificateAlias;
+
+
+    private String subjectCN;
+
+    private String subjectO;
+
+    private String subjectC;
+
+    private String subjectE;
+
+
+    private Long issuerId;
+
+    // TODO: Remove
+    private String issuerAlias;
+
+
+    private String issuerCN;
+
+    private String issuerO;
+
+    private String issuerC;
+
+    private String issuerE;
+
 
     private Long issuedOn;
 
     private Long expiresOn;
 
-    private HashSet<Extension> extensions;
-
-    private Certificate issuer;
-
     private CertificateType type;
+
+    private String signature;
+
+    private String publicKey;
+
 }
