@@ -20,6 +20,7 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.security.spec.InvalidKeySpecException;
@@ -30,11 +31,15 @@ import java.util.Date;
 
 @Component
 public class CertificateGenerator {
+
+    @Autowired
+    private KeyDecoder keyDecoder;
+
     public CertificateGenerator() {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public static X509Certificate generateCertificate(Issuer issuer, CSR csr) {
+    public X509Certificate generateCertificate(Issuer issuer, CSR csr, PublicKey publicKey) {
         try {
             JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
             builder = builder.setProvider("BC");
@@ -43,12 +48,14 @@ public class CertificateGenerator {
 
             Long currentMillis = System.currentTimeMillis();
 
+            PublicKey subjectPublicKey = publicKey != null ? publicKey : keyDecoder.decodePublic(csr.getPublicKey());
+
             X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuer.getX500name(),
                     BigInteger.valueOf(currentMillis),
                     new Date(currentMillis),
                     new Date(getExpiresOn(currentMillis, csr.getTemplate())),
                     getX500Name(csr),
-                    getPbKey(csr.getPublicKey()));
+                    subjectPublicKey);
 
             X509CertificateHolder certHolder = certGen.build(contentSigner);
 
@@ -75,7 +82,7 @@ public class CertificateGenerator {
         return null;
     }
 
-    public static X509Certificate generateRootCertificate(CSR csr, KeyPair keyPair) {
+    public X509Certificate generateRootCertificate(CSR csr, KeyPair keyPair) {
         try {
             JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
             builder = builder.setProvider("BC");
@@ -113,7 +120,7 @@ public class CertificateGenerator {
     }
 
 
-    public static X500Name getX500Name(CSR csr){
+    public X500Name getX500Name(CSR csr){
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
         builder.addRDN(BCStyle.CN, csr.getCommonName());
         builder.addRDN(BCStyle.O, csr.getOrganization());
@@ -122,7 +129,7 @@ public class CertificateGenerator {
         return builder.build();
     }
 
-    public static Long getExpiresOn(Long issuedOn, CertificateType type){
+    public Long getExpiresOn(Long issuedOn, CertificateType type){
         Long ret = issuedOn;
         switch (type) {
             case CertificateType.SS:
@@ -136,36 +143,6 @@ public class CertificateGenerator {
                 break;
         }
         return ret;
-    }
-
-    public static PublicKey getPbKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String publicKeyPEM = publicKey
-                .replace("-----BEGIN RSA PUBLIC KEY-----", "")
-                .replace("-----END RSA PUBLIC KEY-----", "")
-                .replaceAll("\\s", "");
-
-        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyPEM);
-
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
-
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
-        return keyFactory.generatePublic(keySpec);
-    }
-
-    public static PrivateKey getPrK(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String privateKeyPEM = privateKey
-                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
-                .replace("-----END RSA PRIVATE KEY-----", "")
-                .replaceAll("\\s", "");
-
-        byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyPEM);
-
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
-        return keyFactory.generatePrivate(keySpec);
     }
 
 }
