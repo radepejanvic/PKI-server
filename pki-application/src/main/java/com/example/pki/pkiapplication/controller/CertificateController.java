@@ -11,6 +11,7 @@ import com.example.pki.pkiapplication.service.impl.CertificateGeneratingServiceI
 import com.sun.net.httpserver.HttpsServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -77,5 +78,14 @@ public class CertificateController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping(value="/{subjectAlias}" , produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> hasCert(@PathVariable String subjectAlias){
+        Certificate cert = certificateService.findByAlias(subjectAlias);
 
+        if (cert == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(cert, HttpStatus.OK);
+    }
 }
