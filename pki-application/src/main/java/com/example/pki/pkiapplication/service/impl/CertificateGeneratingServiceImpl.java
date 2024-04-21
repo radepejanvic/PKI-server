@@ -4,6 +4,7 @@ import com.example.pki.pkiapplication.model.CSR;
 import com.example.pki.pkiapplication.model.Certificate;
 import com.example.pki.pkiapplication.model.Issuer;
 import com.example.pki.pkiapplication.util.CertificateGenerator;
+import com.example.pki.pkiapplication.util.KeyEncoder;
 import com.example.pki.pkiapplication.util.KeyGenerator;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class CertificateGeneratingServiceImpl {
 
     @Autowired
     private KeyGenerator keyGenerator;
+
+    @Autowired
+    private KeyEncoder keyEncoder;
 
     public Certificate generateCertificate(CSR csr) {
         return switch (csr.getTemplate()) {
@@ -52,7 +56,10 @@ public class CertificateGeneratingServiceImpl {
 
         Issuer issuer = generateIssuer(csr.getIssuerAlias());
         KeyPair keyPair = keyGenerator.generateKeys();
+        csr.setPublicKey(keyEncoder.encodePublicKey(keyPair.getPublic()));
         X509Certificate certificate = certificateGenerator.generateCertificate(issuer, csr, keyPair.getPublic());
+
+        System.out.println(certificate);
 
         keyStoringService.write(csr.getSubjectAlias(), certificate, keyPair.getPrivate());
 
@@ -63,6 +70,7 @@ public class CertificateGeneratingServiceImpl {
     public Certificate generateRoot(CSR csr) {
 
         KeyPair keyPair = keyGenerator.generateKeys();
+        csr.setPublicKey(keyEncoder.encodePublicKey(keyPair.getPublic()));
         X509Certificate certificate = certificateGenerator.generateRootCertificate(csr, keyPair);
 
         keyStoringService.write(csr.getSubjectAlias(), certificate, keyPair.getPrivate());

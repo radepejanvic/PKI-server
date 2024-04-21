@@ -60,5 +60,15 @@ public class KeyStoringServiceImpl {
         return pemKeyStore.read(filename);
     }
 
+    public void delete(String alias) {
+//        pronadje svu decu za roditelja
+//        obrise iz baze
+//        obrise iz key stora
+//        obrise pem
+//        I DECU I RODITELJA
+
+
+    }
+
 
 }

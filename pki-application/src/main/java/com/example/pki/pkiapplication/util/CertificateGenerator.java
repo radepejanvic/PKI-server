@@ -54,12 +54,19 @@ public class CertificateGenerator {
                     getX500Name(csr),
                     subjectPublicKey);
 
+            System.out.println("Pre ekstenzija: " + csr);
             ExtensionsGenerator.addExtensions(certGen, csr, issuer);
+
+            System.out.println("Posle ekstenzija 1: " + csr);
 
             X509CertificateHolder certHolder = certGen.build(contentSigner);
 
+            System.out.println("Posle ekstenzija 2: " + csr);
+
             JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
             certConverter = certConverter.setProvider("BC");
+
+            System.out.println("Posle ekstenzija 3: " + csr);
 
             return certConverter.getCertificate(certHolder);
 
