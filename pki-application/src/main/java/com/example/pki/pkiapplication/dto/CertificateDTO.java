@@ -1,7 +1,7 @@
 package com.example.pki.pkiapplication.dto;
 
 import com.example.pki.pkiapplication.model.Certificate;
-import com.example.pki.pkiapplication.model.CertificateType;
+import com.example.pki.pkiapplication.model.enums.CertificateType;
 import com.example.pki.pkiapplication.model.Extension;
 import lombok.Data;
 
