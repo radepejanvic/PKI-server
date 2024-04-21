@@ -9,6 +9,7 @@ import org.bouncycastle.cert.X509v3CertificateBuilder;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 
@@ -16,6 +17,7 @@ import java.util.Arrays;
 public class ExtensionsGenerator {
     public static void addExtensions(X509v3CertificateBuilder certificateBuilder, CSR csr, Issuer issuer) throws Exception {
 
+        System.out.println("U ekstenziji: " + csr);
         certificateBuilder.addExtension(Extension.basicConstraints, true, generateBasicConstraints(csr));
         certificateBuilder.addExtension(Extension.subjectKeyIdentifier, false, generateSubjectKeyIdentifier(csr));
         certificateBuilder.addExtension(Extension.keyUsage, true, generateKeyUsage(csr));
