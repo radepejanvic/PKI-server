@@ -52,11 +52,5 @@ public class KeyStoreReader {
         return null;
     }
 
-    public X500Name readIssuerX500Name(String keyStoreFile, String keyStorePass, String alias) {
-        X509Certificate x509Certificate = readCertificate(keyStoreFile, keyStorePass, alias);
-
-        X500Principal x500Principal = x509Certificate.getIssuerX500Principal();
-        return new X500Name(x500Principal.getName());
-    }
 
 }
