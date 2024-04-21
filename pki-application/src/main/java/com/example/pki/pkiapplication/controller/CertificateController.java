@@ -6,6 +6,7 @@ import com.example.pki.pkiapplication.mapper.CSRDTOMapper;
 import com.example.pki.pkiapplication.mapper.CertificateDTOMapper;
 import com.example.pki.pkiapplication.model.CSR;
 import com.example.pki.pkiapplication.model.Certificate;
+import com.example.pki.pkiapplication.model.enums.CSRStatus;
 import com.example.pki.pkiapplication.model.enums.CertificateType;
 import com.example.pki.pkiapplication.service.CSRService;
 import com.example.pki.pkiapplication.service.CertificateService;
@@ -20,6 +21,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.pki.pkiapplication.mapper.CertificateDTOMapper.toDTO;
 
 @RestController
 @Validated
@@ -52,7 +55,7 @@ public class CertificateController {
 
         if (certificate == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
 
-        return new ResponseEntity<>(CertificateDTOMapper.toDTO(certificate), HttpStatus.OK);
+        return new ResponseEntity<>(toDTO(certificate), HttpStatus.OK);
     }
 
     @PostMapping(consumes = "application/json")
@@ -102,7 +105,10 @@ public class CertificateController {
         cert.setType(csr.getTemplate());
         certificateService.save(cert);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        csr.setStatus(CSRStatus.APPROVED);
+        csrService.save(csr);
+
+        return new ResponseEntity<>(toDTO(cert), HttpStatus.CREATED);
     }
 
 
