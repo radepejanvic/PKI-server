@@ -15,6 +15,8 @@ import java.security.cert.X509Certificate;
 @Service
 public class KeyStoringServiceImpl {
 
+    // TODO: Rename the service to something more suitable.
+
     @Value(value="${keys}")
     private String privateKeyStore;
 
@@ -42,8 +44,10 @@ public class KeyStoringServiceImpl {
         keyStoreWriter.write(alias, cert);
         keyStoreWriter.saveKeyStore(certStore, certStorePass.toCharArray());
 
-        String filename = String.format("%s/%s.pem", privateKeyStore, alias);
-        pemKeyStore.write(filename, privateKey);
+        if (privateKey != null) {
+            String filename = String.format("%s/%s.pem", privateKeyStore, alias);
+            pemKeyStore.write(filename, privateKey);
+        }
     }
 
     public X509Certificate read(String alias) {
