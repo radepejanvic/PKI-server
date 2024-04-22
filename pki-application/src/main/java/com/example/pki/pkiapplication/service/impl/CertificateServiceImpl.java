@@ -55,32 +55,17 @@ public class CertificateServiceImpl implements CertificateService {
         return certificateRepository.findByAlias(alias);
     }
 
-
-    public List<Certificate> findChildren(String alias) {
-        List<Certificate> children = new ArrayList<>();
-
-
-
-
-        return children;
-    }
-
-
     public List<Certificate> traverseSubtree(Certificate startNode) {
         List<Certificate> visitedNodes = new ArrayList<>();
         dfs(startNode, visitedNodes);
         return visitedNodes;
     }
 
-    // Recursive depth-first search function
     private void dfs(Certificate currentNode, List<Certificate> visitedNodes) {
-        // Add the current node to the visited nodes collection
         visitedNodes.add(currentNode);
 
-        // Get the children of the current node
         List<Certificate> children = certificateRepository.findByIssuerId(currentNode.getId());
 
-        // Traverse each child recursively
         for (Certificate child : children) {
             dfs(child, visitedNodes);
         }

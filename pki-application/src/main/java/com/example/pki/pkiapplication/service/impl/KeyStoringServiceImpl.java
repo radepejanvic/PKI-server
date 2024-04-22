@@ -1,6 +1,9 @@
 package com.example.pki.pkiapplication.service.impl;
 
 
+import com.example.pki.pkiapplication.model.Certificate;
+import com.example.pki.pkiapplication.service.CertificateService;
+import com.example.pki.pkiapplication.util.KeyStoreDeleter;
 import com.example.pki.pkiapplication.util.KeyStoreReader;
 import com.example.pki.pkiapplication.util.KeyStoreWriter;
 import com.example.pki.pkiapplication.util.PemKeyStore;
@@ -12,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class KeyStoringServiceImpl {
@@ -34,7 +40,13 @@ public class KeyStoringServiceImpl {
     private KeyStoreReader keyStoreReader;
 
     @Autowired
+    private KeyStoreDeleter keyStoreDeleter;
+
+    @Autowired
     private PemKeyStore pemKeyStore;
+
+    @Autowired
+    private CertificateService certificateService;
 
     // TODO: Depending on the certificate type create new .jks file.
     // TODO: Expand read and write functions to go over multiple .jks files when implemented.
@@ -61,13 +73,19 @@ public class KeyStoringServiceImpl {
     }
 
     public void delete(String alias) {
-//        pronadje svu decu za roditelja
-//        obrise iz baze
-//        obrise iz key stora
-//        obrise pem
-//        I DECU I RODITELJA
+        Certificate parent = certificateService.findByAlias(alias);
+        List<Certificate> children = certificateService.traverseSubtree(parent);
 
+        Collections.reverse(children);
 
+        for (Certificate child : children) {
+            keyStoreDeleter.deleteCertificate(certStore, certStorePass, alias);
+
+            String filename = String.format("%s/%s.pem", privateKeyStore, alias);
+            pemKeyStore.delete(filename);
+
+            certificateService.remove(child);
+        }
     }
 
 
