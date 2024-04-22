@@ -6,6 +6,7 @@ import com.example.pki.pkiapplication.mapper.CSRDTOMapper;
 import com.example.pki.pkiapplication.mapper.CertificateDTOMapper;
 import com.example.pki.pkiapplication.model.CSR;
 import com.example.pki.pkiapplication.model.Certificate;
+import com.example.pki.pkiapplication.model.enums.CSRStatus;
 import com.example.pki.pkiapplication.model.enums.CertificateType;
 import com.example.pki.pkiapplication.service.CSRService;
 import com.example.pki.pkiapplication.service.CertificateService;
@@ -135,5 +136,17 @@ public class CertificateController {
         }
 
         return new ResponseEntity<>(cert, HttpStatus.OK);
+    }
+
+//    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id){
+        Certificate certificate = certificateService.findOne(id);
+
+        if(certificate == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        keyStoringService.delete(certificate.getAlias());
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
