@@ -4,14 +4,9 @@ import com.example.pki.pkiapplication.model.User;
 import com.example.pki.pkiapplication.model.enums.UserType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
 public class UserCredentialsDTO {
 

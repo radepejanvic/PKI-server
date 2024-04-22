@@ -1,10 +1,10 @@
 package com.example.pki.pkiapplication.model;
 
+import com.example.pki.pkiapplication.model.enums.CertificateType;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
 
-import java.util.HashSet;
+import java.math.BigInteger;
 
 @Entity
 @Data
@@ -15,16 +15,19 @@ public class Certificate {
     private Long id;
 
     @Column(unique = true)
-    private Long serialNumber;
+    private BigInteger serialNumber;
 
+    @Column(unique = true)
+    private String alias;
+
+    // TODO: Remove subject, issuedOn, expiresOn, valid
     private String subject;
 
     private Long issuedOn;
 
     private Long expiresOn;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private HashSet<Extension> extensions;
+    private boolean valid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Certificate issuer;
