@@ -39,4 +39,18 @@ public class PemKeyStore {
         }
     }
 
+    public void delete(String filename) {
+        File file = new File(filename);
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("File deleted successfully: " + filename);
+            } else {
+                System.out.println("Failed to delete file: " + filename);
+            }
+        } else {
+            System.out.println("File does not exist: " + filename);
+        }
+    }
+
+
 }
