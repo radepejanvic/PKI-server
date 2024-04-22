@@ -44,7 +44,7 @@ public class CertificateDTOMapper {
 
 
         if(cert.getIssuer() != null) {
-            dto.setId(cert.getIssuer().getId());
+            dto.setIssuerId(cert.getIssuer().getId());
             dto.setIssuerAlias(cert.getIssuer().getAlias());
         }
 
