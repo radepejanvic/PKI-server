@@ -123,6 +123,9 @@ public class CertificateController {
         cert.setType(csr.getTemplate());
         certificateService.save(cert);
 
+        csr.setStatus(CSRStatus.APPROVED);
+        csrService.save(csr);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
