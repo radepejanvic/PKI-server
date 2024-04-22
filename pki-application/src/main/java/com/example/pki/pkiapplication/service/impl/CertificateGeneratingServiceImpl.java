@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.security.auth.x500.X500Principal;
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 @Service
@@ -43,11 +45,20 @@ public class CertificateGeneratingServiceImpl {
     public Certificate generateEE(CSR csr) {
 
         Issuer issuer = generateIssuer(csr.getIssuerAlias());
-        X509Certificate certificate = certificateGenerator.generateCertificate(issuer, csr, null);
 
-        keyStoringService.write(csr.getSubjectAlias(), certificate, null);
+        PublicKey publicKey = null;
+        PrivateKey privateKey = null;
 
-        System.out.println(keyStoringService.read(csr.getEmail()));
+        if (csr.getPublicKey().isEmpty()) {
+            KeyPair keyPair = keyGenerator.generateKeys();
+            publicKey = keyPair.getPublic();
+            privateKey = keyPair.getPrivate();
+            csr.setPublicKey(keyEncoder.encodePublicKey(publicKey));
+        }
+
+        X509Certificate certificate = certificateGenerator.generateCertificate(issuer, csr, publicKey);
+
+        keyStoringService.write(csr.getSubjectAlias(), certificate, privateKey);
 
         return convert(certificate);
     }
