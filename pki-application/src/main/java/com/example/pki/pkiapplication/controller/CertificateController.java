@@ -138,7 +138,7 @@ public class CertificateController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(cert, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //    @PreAuthorize("hasRole('SUPER_ADMIN')")
